@@ -1,0 +1,40 @@
+name: Daily Trading Bot
+
+# Trigger: Runs every weekday (Mon-Fri) at 21:00 UTC (4 PM New York time)
+on:
+  schedule:
+    - cron: '0 21 * * 1-5'
+  # Allows you to click "Run Now" manually for testing
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: |
+          pip install pandas numpy yfinance scikit-learn xgboost matplotlib joblib
+
+      - name: Run Inference Script
+        run: |
+          python -m src.inference
+
+      - name: Commit and Push Log
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          git add trade_log.csv
+          git commit -m "📈 Daily Bot Update" || echo "No changes to commit"
+          git push
