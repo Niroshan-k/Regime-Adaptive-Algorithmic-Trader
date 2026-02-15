@@ -1,0 +1,42 @@
+name: Daily Trading Bot
+
+on:
+  schedule:
+    # Runs at 21:00 UTC every Mon-Fri
+    - cron: '0 21 * * 1-5'
+  # Allows you to run this manually from the Actions tab for testing
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        # We manually install libraries to avoid requirements.txt errors for now
+        run: |
+          pip install pandas numpy yfinance scikit-learn xgboost matplotlib joblib
+
+      - name: Run Inference Script
+        run: |
+          # We use python -m to ensure imports work correctly
+          python -m src.inference
+
+      - name: Commit and Push Log
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          git add trade_log.csv
+          git commit -m "📈 Daily Bot Update" || echo "No changes to commit"
+          git push
