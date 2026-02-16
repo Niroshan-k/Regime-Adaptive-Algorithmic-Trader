@@ -10,8 +10,9 @@ st.set_page_config(page_title="RAAT Dashboard", layout="wide", page_icon="🦎")
 st.markdown("""
 <style>
     .stMetric {
-        background-color: #3b013b;
+        background-color: #000000;
         padding: 15px;
+        border: 1px white
         border-radius: 10px;
     }
 </style>
