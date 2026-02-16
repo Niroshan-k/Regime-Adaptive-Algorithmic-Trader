@@ -12,7 +12,7 @@ st.markdown("""
     .stMetric {
         background-color: #000000;
         padding: 15px;
-        border: 1px white
+        border: 1px
         border-radius: 10px;
     }
 </style>
