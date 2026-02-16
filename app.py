@@ -10,7 +10,7 @@ st.set_page_config(page_title="RAAT Dashboard", layout="wide", page_icon="🦎")
 st.markdown("""
 <style>
     .stMetric {
-        background-color: #f0f2f6;
+        background-color: #3b013b;
         padding: 15px;
         border-radius: 10px;
     }
@@ -43,12 +43,12 @@ with st.sidebar:
     """)
     
     st.write("---")
-    st.caption("Built with Python, XGBoost, GitHub Actions & Streamlit.")
+    st.caption("Built with Python, K-Means, PCA, XGBoost, GitHub Actions & Streamlit.")
 
 # ---------------------------------------------------------
 # MAIN DASHBOARD
 # ---------------------------------------------------------
-st.title("🦎 RAAT: AI Trading Command Center")
+st.title("🦎 Regime Adaptive Trading Algorithm")
 st.markdown("### 🔴 Live Market Status")
 
 # 1. LOAD DATA
