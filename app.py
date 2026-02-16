@@ -6,13 +6,14 @@ import pandas as pd
 # ---------------------------------------------------------
 st.set_page_config(page_title="RAAT Dashboard", layout="wide", page_icon="🦎")
 
-
+# FIXED CSS: Added 'border:' and text color
 st.markdown("""
 <style>
-    .stMetric {
+    [data-testid="stMetric"], .stMetric {
         background-color: #000000;
+        color: white;
         padding: 15px;
-        border: 1px
+        border: 1px solid white;
         border-radius: 10px;
     }
 </style>
@@ -60,13 +61,7 @@ try:
     latest = df.iloc[-1]
     
     # --- TRANSLATE ROBOT SPEAK TO HUMAN SPEAK ---
-    # NOTE: Check your own training! Usually 0=Stable, 1=Volatile.
     regime_name = "🟢 Bull / Stable" if latest['Regime'] == 0 else "🔴 Bear / Volatile"
-    
-    # Color logic for Signal
-    signal_color = "normal"
-    if "BUY" in latest['Final_Signal']:
-        signal_color = "off" # Streamlit metric color trick (or use delta)
     
     # 3. METRICS ROW
     col1, col2, col3 = st.columns(3)
@@ -92,13 +87,16 @@ try:
             delta="Latest Close"
         )
 
-    # 4. DATA TABLE
+    # 4. DATA TABLE (FIXED: SCROLLABLE)
     st.divider()
     st.subheader("📜 Trade History Log")
+    
+    # height=300 makes it a scrollable box!
     st.dataframe(
         df.sort_values(by='Date', ascending=False),
         use_container_width=True,
-        hide_index=True
+        hide_index=True,
+        height=300  
     )
 
     # 5. CHARTS (Only show if we have history)
@@ -107,10 +105,8 @@ try:
     
     if len(df) < 2:
         st.info("⚠️ **Waiting for more data.** The chart will appear after the bot runs for a few days.")
-        # Show a placeholder image or explanation instead of a broken chart
         st.progress(10, text="Building historical database... (1/10 days collected)")
     else:
-        # If we have data, show a nice chart
         # We map 0 and 1 to names for the chart
         df['Regime_Name'] = df['Regime'].map({0: 'Bull', 1: 'Bear'})
         
